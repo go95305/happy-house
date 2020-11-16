@@ -244,7 +244,7 @@ $(document).ready(function(){
 						let tmpLat;
 						let tmpLng;
 						$.get("https://maps.googleapis.com/maps/api/geocode/json"
-								,{	key:'AIzaSyDaNw2J6tuCdYZA-1DKLPyl4AxD3HokA6s'
+								,{	key:'API-KEY'
 									, address:vo.dong+"+"+vo.aptName+"+"+vo.jibun
 								}
 								, function(data, status) {
