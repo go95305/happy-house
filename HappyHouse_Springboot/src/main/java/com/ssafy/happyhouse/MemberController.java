@@ -52,7 +52,8 @@ public class MemberController {
 			mv.setViewName("redirect:/");
 		}catch (SQLException e) {
 			e.printStackTrace();
-			throw new ServletException(e);
+			mv.addObject("msg", "삭제 중 문제가 발생했습니다.");
+			mv.setViewName("/error");
 		}
 		session.invalidate();
 		return mv;
@@ -97,6 +98,7 @@ public class MemberController {
 			list = memberService.searchMember(map);
 			System.out.println(list.size());
 		}catch (Exception e) {
+			
 		}	
 		return list;
 	}
@@ -109,6 +111,7 @@ public class MemberController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			mv.addObject("msg", "수정 중 문제가 발생했습니다.");
+			mv.setViewName("/error");
 		}
 		return mv;
 	}
@@ -121,6 +124,7 @@ public class MemberController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			mv.addObject("msg", "회원가입 중 문제가 발생했습니다.");
+			mv.setViewName("/error");
 		}
 		return mv;
 	}
@@ -148,10 +152,12 @@ public class MemberController {
 				mv.setViewName("redirect:/");
 			} else {
 				request.setAttribute("msg", "loginFail");
+				mv.setViewName("/error");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("msg", "로그인 중 문제가 발생했습니다.");
+			mv.addObject("msg", "로그인 중 문제가 발생했습니다.");
+			mv.setViewName("/error");
 		}
 		
 		return mv;

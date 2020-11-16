@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,13 +21,12 @@ import com.ssafy.happyhouse.service.HouseMapService;
 @RestController
 @RequestMapping("/map")
 public class HouseMapController {
-	
+
 	@Autowired
 	HouseMapService houseMapService;
-	
-	
+
 	@GetMapping("sido")
-	public List<SidoGugunCodeDto> getSido(){
+	public List<SidoGugunCodeDto> getSido() {
 		List<SidoGugunCodeDto> list = null;
 		try {
 			list = houseMapService.getSido();
@@ -35,10 +35,9 @@ public class HouseMapController {
 		}
 		return list;
 	}
-	
-	
+
 	@GetMapping("gugun")
-	public List<SidoGugunCodeDto> getGugun(String sido){
+	public List<SidoGugunCodeDto> getGugun(String sido) {
 		List<SidoGugunCodeDto> list = null;
 		try {
 			list = houseMapService.getGugunInSido(sido);
@@ -47,9 +46,9 @@ public class HouseMapController {
 		}
 		return list;
 	}
-	
+
 	@GetMapping("dong")
-	public List<HouseInfoDto> getDong(String gugun){
+	public List<HouseInfoDto> getDong(String gugun) {
 		List<HouseInfoDto> list = null;
 		try {
 			list = houseMapService.getDongInGugun(gugun);
@@ -58,9 +57,9 @@ public class HouseMapController {
 		}
 		return list;
 	}
-	
+
 	@GetMapping("apt")
-	public List<HouseInfoDto> getApt(String dong){
+	public List<HouseInfoDto> getApt(String dong) {
 		List<HouseInfoDto> list = null;
 		try {
 			list = houseMapService.getAptInDong(dong);
@@ -69,12 +68,11 @@ public class HouseMapController {
 		}
 		return list;
 	}
-	
-	
+
 	@GetMapping("deal")
-	public List<HouseInfoDto> getDealContents(String dong, String apt){
+	public List<HouseInfoDto> getDealContents(String dong, String apt) {
 		List<HouseInfoDto> list = null;
-		Map<String,String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("dong", dong);
 		map.put("apt", apt);
 		try {

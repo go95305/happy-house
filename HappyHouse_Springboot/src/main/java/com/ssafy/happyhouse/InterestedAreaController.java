@@ -56,6 +56,7 @@ public class InterestedAreaController {
 			}
 		} else {
 			mv.addObject("msg", "로그인 후 사용 가능한 페이지입니다.");
+			mv.setViewName("/error");
 		}
 		return mv;
 	}
@@ -68,6 +69,7 @@ public class InterestedAreaController {
 			list = interestSer.showDetail(apt);
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		return list;
 	}

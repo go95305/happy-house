@@ -39,8 +39,8 @@
          <ul>
             <li class="active"><a href="${root}/" accesskey="1"
                title="">소개</a></li>
-            <li><a href="#" accesskey="2"
-               title="">코로나 선별소 검색</a></li>
+            <li><a href="http://localhost:8080/" accesskey="2"
+               title="">QnA</a></li>
             <c:if test="${userinfo ne null}">
             
             </c:if>

@@ -35,6 +35,11 @@ public class HomeController {
 		return "/home/index";
 	}
 	
+	@RequestMapping(value = "/error", method = RequestMethod.GET)
+	public String error(Locale locale, Model model) {
+		return "/error";
+	}
+	
 	@RequestMapping(value = "priceview", method = RequestMethod.GET)
 	public String priceView(Locale locale, Model model) {
 		return "/happyhouse/price_view";

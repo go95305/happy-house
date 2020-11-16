@@ -26,4 +26,9 @@
 	And Member_id = #{memberId}
 </delete>
 
+<delete id="deleteInterestId" parameterType="String">
+	delete from area_interest
+	where  Member_id = #{userid}
+</delete>
+
 </mapper>

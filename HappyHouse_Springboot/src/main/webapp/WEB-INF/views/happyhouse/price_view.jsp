@@ -231,9 +231,7 @@ $(document).ready(function(){
 			'text'); //get			
 		});
 		
-		
-		//delete버튼 클릭 시 sql 삭제 -> get방식으로 구현 하면 됨.
-		
+					
 		
     });
     
@@ -244,7 +242,7 @@ $(document).ready(function(){
 						let tmpLat;
 						let tmpLng;
 						$.get("https://maps.googleapis.com/maps/api/geocode/json"
-								,{	key:'API-KEY'
+								,{	key:'AIzaSyDaNw2J6tuCdYZA-1DKLPyl4AxD3HokA6s'
 									, address:vo.dong+"+"+vo.aptName+"+"+vo.jibun
 								}
 								, function(data, status) {

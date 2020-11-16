@@ -10,7 +10,6 @@
 						function(data, status) {
 							$("#noticeList").empty();
 							$.each(data, function(index, vo) {
-								console.log(vo.content);
 								let str = '<li>'
 										+ '<strong><p class="noticeContent">'
 										+ vo.subject + '<strong>' + '</p>'
@@ -48,7 +47,7 @@
 						Info</span></a>
 			</div>
 			<div id="fbox3">
-				<a href="/happyhouse/star_view.jsp"><img
+				<a href="${root}/"><img
 					src="${root}/resources/img/pic03.jpg" alt="" /></a>
 				<h2>관심지역 업소정보 확인</h2>
 				<p>주변의 편의시설들을 편하게 검새해 보세요. 지하철역부터 대형마트까지! 직접 가보지 않아도 쉽게 알아보세요.</p>
