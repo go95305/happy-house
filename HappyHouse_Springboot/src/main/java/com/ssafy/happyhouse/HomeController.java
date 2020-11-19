@@ -45,6 +45,11 @@ public class HomeController {
 		return "/happyhouse/price_view";
 	}
 	
+	@RequestMapping(value = "storeStar", method = RequestMethod.GET)
+	public String storeStar(Locale locale, Model model) {
+		return "/happyhouse/store_view";
+	}
+	
 	@RequestMapping(value = "sitemap", method = RequestMethod.GET)
 	public String siteMap(Locale locale, Model model) {
 		return "/happyhouse/sitemap";

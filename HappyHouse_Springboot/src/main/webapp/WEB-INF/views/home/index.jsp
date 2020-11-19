@@ -35,7 +35,7 @@
 			</div>
 			<div id="fbox2">
 				<c:if test="${userinfo eq null }">
-					<a href="${root}/priceview">
+					<a href="${root}/interest/showStar">
 				</c:if>
 				<c:if test="${userinfo ne null }">
 					<a href="${root}/interest/showStar">
@@ -47,11 +47,11 @@
 						Info</span></a>
 			</div>
 			<div id="fbox3">
-				<a href="${root}/"><img
+				<a href="${root}/storeStar"><img
 					src="${root}/resources/img/pic03.jpg" alt="" /></a>
 				<h2>관심지역 업소정보 확인</h2>
 				<p>주변의 편의시설들을 편하게 검새해 보세요. 지하철역부터 대형마트까지! 직접 가보지 않아도 쉽게 알아보세요.</p>
-				<a href="#" class="button"><span>More Info</span></a>
+				<a href="${root}/storeStar" class="button"><span>More Info</span></a>
 			</div>
 		</div>
 		<div id="page" class="container">

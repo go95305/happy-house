@@ -60,6 +60,7 @@ public class InterestedAreaController {
 		}
 		return mv;
 	}
+	
 
 	@GetMapping("detail")
 	@ResponseBody

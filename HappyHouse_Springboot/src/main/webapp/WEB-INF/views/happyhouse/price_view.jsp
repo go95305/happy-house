@@ -162,6 +162,7 @@ $(document).ready(function(){
 						$("#pricelist").empty();
 						
 						$.each(data, function(index, vo) {
+							console.log(data);
 							let str = '<div class="price-row">'
 							+ '<input type="hidden" name="act" id="dongNo" value='+vo.no+'>'
 							+ '&nbsp&nbsp<h3>' + vo.aptName + "</h3>"

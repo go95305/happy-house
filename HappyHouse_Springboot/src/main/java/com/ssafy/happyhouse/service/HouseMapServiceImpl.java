@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.happyhouse.dao.HouseMapDao;
 import com.ssafy.happyhouse.model.HouseInfoDto;
 import com.ssafy.happyhouse.model.SidoGugunCodeDto;
+import com.ssafy.happyhouse.model.StoreDto;
 
 @Service
 public class HouseMapServiceImpl implements HouseMapService {
@@ -40,6 +41,11 @@ public class HouseMapServiceImpl implements HouseMapService {
 	@Override
 	public List<HouseInfoDto> getDealcontents(Map<String,String> map) throws Exception {
 		return sqlSession.getMapper(HouseMapDao.class).getDealcontents(map);
+	}
+
+	@Override
+	public List<StoreDto> getStoreInDong(String dong) throws Exception {
+		return sqlSession.getMapper(HouseMapDao.class).getStoreInDong(dong);
 	}
 
 }
