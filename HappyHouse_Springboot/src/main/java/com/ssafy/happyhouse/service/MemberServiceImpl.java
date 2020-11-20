@@ -17,7 +17,7 @@ public class MemberServiceImpl implements MemberService{
 	SqlSession sqlSession;
 
 	@Override
-	public MemberDto login(Map<String, String> map) throws Exception {
+	public MemberDto login(Map<String, Object> map) throws Exception {
 //		System.out.println(map.get("id") + " : " + map.get("pw"));
 		if(map.get("id") == null || map.get("pw") == null)
 			return null;

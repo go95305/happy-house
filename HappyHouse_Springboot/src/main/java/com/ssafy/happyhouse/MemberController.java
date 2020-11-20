@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ssafy.happyhouse.model.MemberDto;
 import com.ssafy.happyhouse.service.MemberService;
+import com.ssafy.happyhouse.service.JwtService;
 
 /**
  * Servlet implementation class MemberController
@@ -37,29 +40,30 @@ import com.ssafy.happyhouse.service.MemberService;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
-	
+
 	@Autowired
 	private MemberService memberService;
-	
-	
+	@Autowired
+	private JwtService jwtService;
+
 	@RequestMapping("deleteMember")
-	private ModelAndView deleteMember(ModelAndView mv,HttpServletRequest request) throws Exception {
+	private ModelAndView deleteMember(ModelAndView mv, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		try {
 			MemberDto memberDto = (MemberDto) session.getAttribute("userinfo");
 			String id = memberDto.getId();
 			memberService.deleteMember(id);
 			mv.setViewName("redirect:/");
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			mv.addObject("msg", "삭제 중 문제가 발생했습니다.");
 			mv.setViewName("/error");
 		}
 		session.invalidate();
 		return mv;
-		
+
 	}
-	
+
 	@GetMapping("listAll")
 	private @ResponseBody List<MemberDto> listAll() {
 		List<MemberDto> list = null;
@@ -67,11 +71,11 @@ public class MemberController {
 		try {
 			list = memberService.listAll();
 			System.out.println(list.size());
-		}catch (Exception e) {
-		}	
+		} catch (Exception e) {
+		}
 		return list;
 	}
-	
+
 	@GetMapping("searchMember/{key}/")
 	private @ResponseBody List<MemberDto> searchAllMember(@PathVariable String key) {
 		List<MemberDto> list = null;
@@ -81,47 +85,47 @@ public class MemberController {
 		try {
 			list = memberService.searchMember(map);
 			System.out.println(list.size());
-		}catch (Exception e) {
-		}	
+		} catch (Exception e) {
+		}
 		return list;
 	}
-	
+
 	@GetMapping("searchMember/{key}/{word}")
-	private @ResponseBody List<MemberDto> searchMember(@PathVariable String key,@PathVariable  String word) {
+	private @ResponseBody List<MemberDto> searchMember(@PathVariable String key, @PathVariable String word) {
 		List<MemberDto> list = null;
 		System.out.println("일부 회원 검색");
-		System.out.println(key + " : "+ word);
+		System.out.println(key + " : " + word);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("key", key);
 		map.put("word", word);
 		try {
 			list = memberService.searchMember(map);
 			System.out.println(list.size());
-		}catch (Exception e) {
-			
-		}	
+		} catch (Exception e) {
+
+		}
 		return list;
 	}
-	
+
 	@RequestMapping("modifyMember")
-	private ModelAndView modifyMember(ModelAndView mv,MemberDto memberDto) throws IOException {
-		try{
+	private ModelAndView modifyMember(ModelAndView mv, MemberDto memberDto) throws IOException {
+		try {
 			memberService.modifyMember(memberDto);
 			mv.setViewName("redirect:/");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			mv.addObject("msg", "수정 중 문제가 발생했습니다.");
 			mv.setViewName("/error");
 		}
 		return mv;
 	}
-	
+
 	@RequestMapping("signup")
-	private ModelAndView signup(ModelAndView mv,MemberDto memberDto) throws IOException {
-		try{
+	private ModelAndView signup(ModelAndView mv, MemberDto memberDto) throws IOException {
+		try {
 			memberService.signup(memberDto);
 			mv.setViewName("redirect:/login");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			mv.addObject("msg", "회원가입 중 문제가 발생했습니다.");
 			mv.setViewName("/error");
@@ -136,31 +140,32 @@ public class MemberController {
 		mv.setViewName("redirect:/");
 		return mv;
 	}
-	
+
 	@RequestMapping("login")
-	private ModelAndView login(ModelAndView mv,HttpServletRequest request, String id, String pw) throws ServletException, IOException {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("id", id);
-		map.put("pw", pw);
+	private ResponseEntity<Map<String, Object>> login(@RequestBody MemberDto mem) throws ServletException, IOException {
+		Map<String, Object> map = new HashMap();
+		HttpStatus status = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		map.put("id", mem.getId());
+		map.put("pw", mem.getPw());
 
 		try {
 			MemberDto memberDto = memberService.login(map);
-			if(memberDto != null) {
-//				session 설정
-				HttpSession session = request.getSession();
-				session.setAttribute("userinfo", memberDto);
-				mv.setViewName("redirect:/");
+			if (memberDto != null) {
+				String token = jwtService.create(memberDto);
+				resultMap.put("auth-token", token);
+				resultMap.put("user-id", memberDto.getId());
+				resultMap.put("user-name", memberDto.getName());
+				status = HttpStatus.ACCEPTED;
 			} else {
-				request.setAttribute("msg", "loginFail");
-				mv.setViewName("/error");
+				resultMap.put("message", "로그인 실패");
+				status = HttpStatus.ACCEPTED;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			mv.addObject("msg", "로그인 중 문제가 발생했습니다.");
-			mv.setViewName("/error");
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		
-		return mv;
-		
+
+		return new ResponseEntity<Map<String,Object>>(resultMap,status);
 	}
 }
