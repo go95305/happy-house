@@ -34,7 +34,6 @@ public class GuestbookController {
 
 	@GetMapping(value = "main/{key}/{word}")
 	public List<GuestBookDto> notice(String pg, @PathVariable String key, @PathVariable String word, String spp) {
-		System.out.println(key);
 		List<GuestBookDto> list = null;
 		int currentPage = 0;
 		if (pg == null)
@@ -54,7 +53,6 @@ public class GuestbookController {
 
 	@GetMapping(value = "mainMounted")
 	public List<GuestBookDto> noticeNull( String pg, String key, String word, String spp) {
-		System.out.println(key);
 		List<GuestBookDto> list = null;
 		int currentPage = 0;
 		if (pg == null)
@@ -100,21 +98,18 @@ public class GuestbookController {
 		return guestBookDto;
 	}
 
-	@RequestMapping("noticeWrite")
-	private ModelAndView noticeWrite(HttpSession session, String subject, String content, ModelAndView mv,
-			GuestBookDto guestbookDto) throws Exception {
+	@PostMapping("noticeWrite")
+	private void noticeWrite(@RequestBody GuestBookDto guestbookDto) throws Exception {
+		System.out.println(guestbookDto.toString());
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			MemberDto memberDto = (MemberDto) session.getAttribute("userinfo");
-			map.put("userid", memberDto.getId());
-			map.put("subject", subject);
-			map.put("content", content);
+			map.put("userid","admin");
+			map.put("subject", guestbookDto.getSubject());
+			map.put("content", guestbookDto.getContent());
 			guestbookService.writeArticle(map);
-			mv.setViewName("redirect:/guestbook/main");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return mv;
 	}
 
 	@RequestMapping("moveModifyArticle")

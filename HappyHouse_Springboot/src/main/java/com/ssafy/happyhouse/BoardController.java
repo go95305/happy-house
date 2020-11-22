@@ -62,17 +62,14 @@ public class BoardController {
 
 	@PostMapping("noticeWrite")
 	private void noticeWrite(@RequestBody BoardDto boardDto) throws Exception {
-		System.out.println("11111111111111111");
-		System.out.println(boardDto.toString());
-		
+		System.out.println(boardDto.getUserid());		
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 //			MemberDto memberDto = (MemberDto) session.getAttribute("userinfo");
-			map.put("userid", "ssafy");
+			map.put("userid", boardDto.getUserid());
 			map.put("subject", boardDto.getSubject());
 			map.put("content", boardDto.getContent());
 			boardService.writeArticle(map);
-			System.out.println("222222222222222");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

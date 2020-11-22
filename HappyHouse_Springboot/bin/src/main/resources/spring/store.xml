@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.dao.HouseMapDao">
+	<select id="getStoreInDong" parameterType="String"
+		resultType="StoreDto">
+		SELECT storename,kind, lat, lng,dong,jibun
+		from sangwon3
+		WHERE dong =
+		#{dong}
+		ORDER BY storename
+	</select>
+</mapper>
