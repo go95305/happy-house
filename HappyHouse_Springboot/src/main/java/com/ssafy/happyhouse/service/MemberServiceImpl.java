@@ -19,9 +19,12 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public MemberDto login(Map<String, Object> map) throws Exception {
 //		System.out.println(map.get("id") + " : " + map.get("pw"));
-		if(map.get("id") == null || map.get("pw") == null)
+		if(map.get("user") == null)
 			return null;
-		return sqlSession.getMapper(MemberDAO.class).login(map);
+		MemberDto mem=sqlSession.getMapper(MemberDAO.class).login(map);
+		System.out.println(mem);
+//		return sqlSession.getMapper(MemberDAO.class).login(map);
+		return mem;
 	}
 
 	@Override

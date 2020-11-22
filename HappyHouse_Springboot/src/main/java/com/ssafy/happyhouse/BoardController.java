@@ -61,7 +61,7 @@ public class BoardController {
 	}
 
 	@PostMapping("noticeWrite")
-	private void noticeWrite(HttpSession session,@RequestBody BoardDto boardDto) throws Exception {
+	private void noticeWrite(@RequestBody BoardDto boardDto) throws Exception {
 		System.out.println("11111111111111111");
 		System.out.println(boardDto.toString());
 		

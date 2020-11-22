@@ -7,37 +7,32 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ssafy.happyhouse.model.MemberDto;
-import com.ssafy.happyhouse.service.MemberService;
 import com.ssafy.happyhouse.service.JwtService;
+import com.ssafy.happyhouse.service.MemberService;
 
 /**
  * Servlet implementation class MemberController
  */
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
-@Controller
+@RestController
 @RequestMapping("/member")
 public class MemberController {
 
@@ -67,10 +62,9 @@ public class MemberController {
 	@GetMapping("listAll")
 	private @ResponseBody List<MemberDto> listAll() {
 		List<MemberDto> list = null;
-		System.out.println("모든회원검색");
 		try {
 			list = memberService.listAll();
-			System.out.println(list.size());
+//			System.out.println(list.size());
 		} catch (Exception e) {
 		}
 		return list;
@@ -79,12 +73,11 @@ public class MemberController {
 	@GetMapping("searchMember/{key}/")
 	private @ResponseBody List<MemberDto> searchAllMember(@PathVariable String key) {
 		List<MemberDto> list = null;
-		System.out.println("모든회원검색");
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("key", key);
 		try {
 			list = memberService.searchMember(map);
-			System.out.println(list.size());
+//			System.out.println(list.size());
 		} catch (Exception e) {
 		}
 		return list;
@@ -93,31 +86,26 @@ public class MemberController {
 	@GetMapping("searchMember/{key}/{word}")
 	private @ResponseBody List<MemberDto> searchMember(@PathVariable String key, @PathVariable String word) {
 		List<MemberDto> list = null;
-		System.out.println("일부 회원 검색");
 		System.out.println(key + " : " + word);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("key", key);
 		map.put("word", word);
 		try {
 			list = memberService.searchMember(map);
-			System.out.println(list.size());
+//			System.out.println(list.size());
 		} catch (Exception e) {
 
 		}
 		return list;
 	}
 
-	@RequestMapping("modifyMember")
-	private ModelAndView modifyMember(ModelAndView mv, MemberDto memberDto) throws IOException {
+	@PutMapping("modifyMember")
+	private void modifyMember(@RequestBody MemberDto memberDto) throws IOException {
 		try {
 			memberService.modifyMember(memberDto);
-			mv.setViewName("redirect:/");
 		} catch (Exception e) {
 			e.printStackTrace();
-			mv.addObject("msg", "수정 중 문제가 발생했습니다.");
-			mv.setViewName("/error");
 		}
-		return mv;
 	}
 
 	@RequestMapping("signup")
@@ -141,13 +129,12 @@ public class MemberController {
 		return mv;
 	}
 
-	@RequestMapping("login")
+	@PostMapping("login")
 	private ResponseEntity<Map<String, Object>> login(@RequestBody MemberDto mem) throws ServletException, IOException {
 		Map<String, Object> map = new HashMap();
 		HttpStatus status = null;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		map.put("id", mem.getId());
-		map.put("pw", mem.getPw());
+		map.put("user", mem);
 
 		try {
 			MemberDto memberDto = memberService.login(map);
@@ -156,6 +143,7 @@ public class MemberController {
 				resultMap.put("auth-token", token);
 				resultMap.put("user-id", memberDto.getId());
 				resultMap.put("user-name", memberDto.getName());
+				resultMap.put("message", "로그인 성공");
 				status = HttpStatus.ACCEPTED;
 			} else {
 				resultMap.put("message", "로그인 실패");

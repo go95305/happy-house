@@ -25,16 +25,18 @@ public class GuestBookServiceImpl implements GuestBookService {
 
    @Override
    public List<GuestBookDto> listArticle(int currentPage, int sizePerPage, String key, String word) throws Exception {
-      key = key == null ? "" : key;
-      word = word == null ? "" : word;
+      key = key == "" ? "" : key;
+      word = word == "" ? "" : word;
       Map<String, String> map = new HashMap<String, String>();
       map.put("range", Integer.toString((currentPage - 1) * sizePerPage));
       map.put("sizePerPage", Integer.toString(sizePerPage));
       map.put("key", key);
       map.put("word", word);
-      return sqlSession.getMapper(GuestBookDao.class).listArticle(map);
+      List<GuestBookDto> list = sqlSession.getMapper(GuestBookDao.class).listArticle(map);
+//      System.out.println("hi");
+//      System.out.println(list);
+      return list;
    }
-
    @Override
    public PageNavigation makePageNavigation(int currentPage, int sizePerPage, String key, String word)
          throws Exception {

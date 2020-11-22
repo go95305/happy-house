@@ -1,7 +1,8 @@
 package com.ssafy.happyhouse.model;
 
 public class MemberDto {
-    private String id;
+    
+	private String id;
 	private String pw;
 	private String name;
 	private String phoneNumber;
@@ -71,6 +72,12 @@ public class MemberDto {
 	}
 	public void setAdmincode(String admincode) {
 		this.admincode = admincode;
+	}
+	@Override
+	public String toString() {
+		return "MemberDto [id=" + id + ", pw=" + pw + ", name=" + name + ", phoneNumber=" + phoneNumber + ", gender="
+				+ gender + ", email=" + email + ", nickName=" + nickName + ", emailCheck=" + emailCheck
+				+ ", phoneCheck=" + phoneCheck + ", admincode=" + admincode + "]";
 	}
     
 }

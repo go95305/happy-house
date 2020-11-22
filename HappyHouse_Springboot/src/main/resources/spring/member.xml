@@ -8,8 +8,8 @@
 		select name,
 		id, email, admincode
 		from member
-		where id = #{id}
-		and pw = #{pw}
+		where id = #{user.id}
+		and pw = #{user.pw}
 	</select>
 
 	<insert id="signup" parameterType="MemberDto">
