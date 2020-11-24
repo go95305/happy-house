@@ -6,11 +6,14 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.happyhouse.dao.InterestedAreaDAO;
 import com.ssafy.happyhouse.dao.MemberDAO;
 import com.ssafy.happyhouse.model.MemberDto;
 
 @Service
+@Transactional
 public class MemberServiceImpl implements MemberService{
 
 	@Autowired
@@ -40,6 +43,8 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public void deleteMember(String userid) throws Exception {
 		sqlSession.getMapper(MemberDAO.class).deleteMember(userid);
+		sqlSession.getMapper(InterestedAreaDAO.class).deleteInterestId(userid);
+
 	}
 
 	@Override

@@ -16,6 +16,12 @@
 		from guestbook
 		where articleno = ${articleno}
 	</select>
+	
+	<select id="articleAll" resultType="GuestBookDto">
+		select articleno, userid, subject, content, regtime
+		from guestbook
+		order by articleno desc
+	</select>
 
 	<delete id="deleteArticle" parameterType="String">
 		delete from guestbook

@@ -10,4 +10,5 @@ public interface InterestedAreaDAO {
 	public List<HouseInfoDto> showDetail(String apt) throws Exception;
 	public void registInterest(Map<String,String> map)throws Exception;
 	public void deleteInterest(Map<String,String> map) throws Exception;
+	public void deleteInterestId(String id) throws Exception;
 }

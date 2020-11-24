@@ -8,7 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +53,19 @@ public class GuestbookController {
 		}
 		return list;
 	}
-
+	@GetMapping("all")
+	public List<GuestBookDto> noticeAll() {
+		List<GuestBookDto> list = null;
+		
+		try {
+			list = guestbookService.articleAll();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	@GetMapping(value = "mainMounted")
 	public List<GuestBookDto> noticeNull( String pg, String key, String word, String spp) {
 		List<GuestBookDto> list = null;
@@ -112,17 +127,17 @@ public class GuestbookController {
 		}
 	}
 
-	@RequestMapping("moveModifyArticle")
-	private ModelAndView moveModifyArticle(String articleno, ModelAndView mv) throws Exception {
-		try {
-			GuestBookDto guestBookDto = guestbookService.getArticle(articleno);
-			mv.addObject("article", guestBookDto);
-			mv.setViewName("happyhouse/modify");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
+//	@RequestMapping("moveModifyArticle")
+//	private ModelAndView moveModifyArticle(String articleno, ModelAndView mv) throws Exception {
+//		try {
+//			GuestBookDto guestBookDto = guestbookService.getArticle(articleno);
+//			mv.addObject("article", guestBookDto);
+//			mv.setViewName("happyhouse/modify");
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return mv;
+//	}
 
 	@PutMapping("modify")
 	private void modifyArticle(@RequestBody GuestBookDto guestBookDto) throws Exception {
@@ -132,16 +147,25 @@ public class GuestbookController {
 			e.printStackTrace();
 		}
 	}
-
-	@RequestMapping("delete")
-	private ModelAndView deleteArticle(String articleno, ModelAndView mv) throws Exception {
+	
+	@DeleteMapping("delete/{articleno}")
+	private ResponseEntity<Map<String, Object>> deleteArticle(@PathVariable String articleno) throws Exception {
+		System.out.println(articleno + " :  11111111111111" );
+		ResponseEntity<Map<String, Object>> resEntity = null;
+		Map<String, Object> mapp = new HashMap<String, Object>();
 		try {
 			guestbookService.deleteArticle(articleno);
-			mv.setViewName("redirect:/guestbook/main");
+			mapp.put("msg", "success");
+			resEntity = new ResponseEntity<Map<String, Object>>(mapp, HttpStatus.OK);
+			System.out.println("삭제성공");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			mapp.put("msg", "fail");
+			resEntity = new ResponseEntity<Map<String, Object>>(mapp, HttpStatus.OK);
+			System.out.println("삭제실패");
 		}
-		return mv;
+		return resEntity;
 	}
 
 	@GetMapping("getTotal/{key}/{word}")

@@ -17,4 +17,6 @@ public interface GuestBookService {
    public void modifyArticle(GuestBookDto guestBookDto) throws Exception;
    public void deleteArticle(String articleno) throws Exception;
    
+   public List<GuestBookDto> articleAll() throws Exception;
+   
 }

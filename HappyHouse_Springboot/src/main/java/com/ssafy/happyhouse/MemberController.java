@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,21 +42,22 @@ public class MemberController {
 	@Autowired
 	private JwtService jwtService;
 
-	@RequestMapping("deleteMember")
-	private ModelAndView deleteMember(ModelAndView mv, HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
+	@DeleteMapping("deleteMember/{userid}")
+	private ResponseEntity<Map<String,Object>> deleteMember(@PathVariable String userid) throws Exception {
+		ResponseEntity<Map<String, Object>> resEntity = null;
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			MemberDto memberDto = (MemberDto) session.getAttribute("userinfo");
-			String id = memberDto.getId();
-			memberService.deleteMember(id);
-			mv.setViewName("redirect:/");
+			memberService.deleteMember(userid);
+			map.put("msg", "success");
+			resEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			System.out.println("삭제성공");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			mv.addObject("msg", "삭제 중 문제가 발생했습니다.");
-			mv.setViewName("/error");
+			map.put("msg", "fail");
+			resEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			System.out.println("삭제실패");
 		}
-		session.invalidate();
-		return mv;
+		return resEntity;
 
 	}
 
@@ -101,6 +103,7 @@ public class MemberController {
 
 	@PutMapping("modifyMember")
 	private void modifyMember(@RequestBody MemberDto memberDto) throws IOException {
+		System.out.println(memberDto.toString() + "11111111111");
 		try {
 			memberService.modifyMember(memberDto);
 		} catch (Exception e) {
@@ -108,26 +111,33 @@ public class MemberController {
 		}
 	}
 
-	@RequestMapping("signup")
-	private ModelAndView signup(ModelAndView mv, MemberDto memberDto) throws IOException {
+	@PostMapping("signup")
+	private ResponseEntity<Map<String, Object>> signup(@RequestBody MemberDto memberDto) throws IOException {
+		System.out.println(memberDto.toString());
+		ResponseEntity<Map<String, Object>> resEntity = null;
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			memberService.signup(memberDto);
-			mv.setViewName("redirect:/login");
+			map.put("msg", "success");
+			resEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			System.out.println("등록성공");
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			mv.addObject("msg", "회원가입 중 문제가 발생했습니다.");
-			mv.setViewName("/error");
+			map.put("msg", "fail");
+			resEntity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+			System.out.println("등록실패");
 		}
-		return mv;
+		return resEntity;
 	}
 
-	@RequestMapping("logout")
-	private ModelAndView logout(HttpServletRequest request, ModelAndView mv) throws IOException {
-		HttpSession session = request.getSession();
-		session.invalidate();
-		mv.setViewName("redirect:/");
-		return mv;
-	}
+//	@RequestMapping("logout")
+//	private ModelAndView logout(HttpServletRequest request, ModelAndView mv) throws IOException {
+//		HttpSession session = request.getSession();
+//		session.invalidate();
+//		mv.setViewName("redirect:/");
+//		return mv;
+//	}
 
 	@PostMapping("login")
 	private ResponseEntity<Map<String, Object>> login(@RequestBody MemberDto mem) throws ServletException, IOException {
@@ -147,7 +157,7 @@ public class MemberController {
 				status = HttpStatus.ACCEPTED;
 			} else {
 				resultMap.put("message", "로그인 실패");
-				status = HttpStatus.ACCEPTED;
+				status = HttpStatus.FORBIDDEN;
 			}
 		} catch (Exception e) {
 			resultMap.put("message", e.getMessage());

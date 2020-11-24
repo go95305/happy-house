@@ -81,4 +81,9 @@ public class GuestBookServiceImpl implements GuestBookService {
       return sqlSession.getMapper(GuestBookDao.class).getTotalCount(map);
    }
 
+@Override
+public List<GuestBookDto> articleAll() throws Exception {
+	return sqlSession.getMapper(GuestBookDao.class).articleAll();
+}
+
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,8 +37,8 @@ public class InterestedStoreController {
 		return list;
 	}
 
-	@GetMapping("gugun")
-	public List<SidoGugunCodeDto> getGugun(String sido) {
+	@GetMapping("gugun/{sido}")
+	public List<SidoGugunCodeDto> getGugun(@PathVariable String sido) {
 		List<SidoGugunCodeDto> list = null;
 		try {
 			list = houseMapService.getGugunInSido(sido);
@@ -47,8 +48,8 @@ public class InterestedStoreController {
 		return list;
 	}
 
-	@GetMapping("dong")
-	public List<HouseInfoDto> getDong(String gugun) {
+	@GetMapping("dong/{gugun}")
+	public List<HouseInfoDto> getDong(@PathVariable String gugun) {
 		List<HouseInfoDto> list = null;
 		try {
 			list = houseMapService.getDongInGugun(gugun);
@@ -58,8 +59,8 @@ public class InterestedStoreController {
 		return list;
 	}
 
-	@GetMapping("store")
-	public List<StoreDto> getStore(String dong) {
+	@GetMapping("store/{dong}")
+	public List<StoreDto> getStore(@PathVariable String dong) {
 		List<StoreDto> list = null;
 		try {
 			list = houseMapService.getStoreInDong(dong);

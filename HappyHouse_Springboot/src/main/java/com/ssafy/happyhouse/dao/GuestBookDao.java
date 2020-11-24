@@ -16,4 +16,5 @@ public interface GuestBookDao {
    public void modifyArticle(GuestBookDto guestBookDto) throws SQLException;
    public void deleteArticle(String articleno) throws SQLException;
    
+   public List<GuestBookDto> articleAll() throws SQLException;
 }
