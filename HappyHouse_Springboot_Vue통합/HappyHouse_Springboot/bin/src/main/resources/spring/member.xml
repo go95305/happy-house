@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.dao.MemberDAO">
+
+	<select id="login" parameterType="map" resultType="MemberDto">
+		select name,
+		id, email, admincode
+		from member
+		where id = #{user.id}
+		and pw = #{user.pw}
+	</select>
+
+	<insert id="signup" parameterType="MemberDto">
+		INSERT INTO member
+		VALUES
+		(#{id}, #{pw},#{name},#{phoneNumber},#{ gender},#{email},
+		#{nickName},#{emailCheck},#{phoneCheck},'0')
+	</insert>
+
+	<update id="modifyMember" parameterType="MemberDto">
+		UPDATE member
+		set pw = #{pw},
+		name = #{name}, phoneNumber = #{phoneNumber}, gender = #{gender}, email =
+		#{email},
+		nickName = #{nickName}, emailCheck = #{emailCheck}, phoneCheck =
+		#{phoneCheck}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteMember" parameterType="String">
+		delete from member
+		where id = #{userid}
+	</delete>
+
+	<select id="searchMember" parameterType="map"
+		resultType="MemberDto">
+		select * from member
+		<if test='word != null'>
+		where ${key} like concat('%',#{word},'%')
+		</if>
+		order by id
+	</select>
+	
+	<select id="listAll" resultType="MemberDto">
+		select * from member
+		order by id
+	</select>
+
+</mapper>

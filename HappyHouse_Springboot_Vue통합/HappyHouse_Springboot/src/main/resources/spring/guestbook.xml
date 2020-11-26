@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.dao.GuestBookDao">
+
+	<update id="modifyArticle" parameterType="GuestbookDto">
+		update guestbook
+		set subject = #{subject}, content = #{content}
+		where articleno = #{articleno}
+	</update>
+
+	<select id="getArticle" parameterType="String"
+		resultType="GuestBookDto">
+		select articleno, userid, subject, content, regtime
+		from guestbook
+		where articleno = ${articleno}
+	</select>
+	
+	<select id="articleAll" resultType="GuestBookDto">
+		select articleno, userid, subject, content, regtime
+		from guestbook
+		order by articleno desc
+	</select>
+
+	<delete id="deleteArticle" parameterType="String">
+		delete from guestbook
+		where articleno = ${articleno}
+	</delete>
+
+	<insert id="writeNotice" parameterType="map">
+		insert into guestbook
+		(userid, subject, content, regtime)
+		values (#{userid}, #{subject},
+		#{content}, now())
+	</insert>
+
+	<select id="listArticle" parameterType="map"
+		resultType="GuestBookDto">
+		select articleno, userid, subject, content, regtime
+		from guestbook
+		<if test="word !=null and word !=''">
+			<if test="key=='subject'">
+				where subject like concat('%',#{word},'%')
+			</if>
+			<if test="key !='subject'">
+				where ${key}=#{word}
+			</if>
+		</if>
+		order by articleno desc
+		limit ${range}, ${sizePerPage}
+
+	</select>
+
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		select count(articleno)
+		from guestbook
+		<if test='word!=""'>
+			<if test='subject=="key"'>
+				where subject like concat('%',#{word},'%')
+			</if>
+			<if test='subject!="key"'>
+				where ${key}=#{word}
+			</if>
+		</if>
+
+	</select>
+
+
+</mapper>

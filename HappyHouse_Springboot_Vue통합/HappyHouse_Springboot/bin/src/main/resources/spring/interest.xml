@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.dao.InterestedAreaDAO">
+
+<select id="showStar" parameterType="String" resultType="HouseInfoDto">
+	SELECT house.no no, house.dong dong, house.AptName AptName, house.code code, house.jibun jibun, house.buildYear buildYear, house.lat lat, house.lng lng
+	from houseinfo house inner join (SELECT house_code from area_interest where Member_Id = #{memberId} ) star
+	on house.no = star.house_code
+</select>
+
+<select id="showDetail" parameterType="String" resultType="HouseInfoDto">
+	Select * from housedeal 
+	where AptName = #{apt}
+</select>
+
+<insert id="registInterest" parameterType="map">
+	insert into area_interest 
+	values (#{memberId},#{dongNo})
+</insert>
+
+<delete id="deleteInterest" parameterType="map">
+	delete from area_interest
+	where House_code = #{dongNo}
+	And Member_id = #{memberId}
+</delete>
+
+<delete id="deleteInterestId" parameterType="String">
+	delete from area_interest
+	where  Member_id = #{userid}
+</delete>
+
+</mapper>
